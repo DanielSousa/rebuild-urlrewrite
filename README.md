@@ -5,7 +5,7 @@ Magento 2 module to rebuild all product url rewrites
 ## Installation
 
 ```
-$ composer require "danielsousa/danielsousa/magento2-module-urlrewrite":"^1.0"
+$ composer require "danielsousa/magento2-module-urlrewrite":"^1.0"
 ```
 
 ## Usage
