@@ -25,6 +25,7 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Helper\ProgressBar;
 
 
 class Products extends Command
@@ -92,8 +93,8 @@ class Products extends Command
             $this->state->setAreaCode('adminhtml');
             $this->output = $output;
             $productCollection = $this->getProductCollection();
-            $this->setupProgress();
-            $this->progressBar->start($productCollection->getSize());
+            $this->setupProgress($productCollection->getSize());
+            $this->progressBar->start();
 
 
             /** @var \Magento\Framework\Model\ResourceModel\Iterator $iterator */
@@ -107,6 +108,7 @@ class Products extends Command
             );
             $this->progressBar->finish();
         } catch (\Exception $e) {
+            $this->output->writeln($e->getMessage());
             return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
         return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
@@ -172,13 +174,9 @@ class Products extends Command
     /**
      * Setup progress bar
      */
-    private function setupProgress()
+    private function setupProgress($operations)
     {
-        $this->progressBar = $this->objectManager->create('\Symfony\Component\Console\Helper\ProgressBar',
-            [
-                'output' => $this->output
-            ]
-        );
+        $this->progressBar = new ProgressBar($this->output, $operations);
         $this->progressBar->setFormat(
             '<info>Product ID: %message%</info> %current%/%max% [%bar%] %percent:3s%% %elapsed% %estimated%        '
         );
