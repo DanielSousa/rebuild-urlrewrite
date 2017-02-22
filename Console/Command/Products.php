@@ -22,64 +22,20 @@
 namespace DanielSousa\UrlRewrite\Console\Command;
 
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Helper\ProgressBar;
 
 
-class Products extends Command
+class Products extends AbstractUrlRewriteCommand
 {
-
-
-    /** Command name */
-    const NAME = 'urlrewrite:rebuild:products';
-
-    const DESCRIPTION = 'Rebuild Product URL Rewrites';
-
-    /**
-     * @var \Symfony\Component\Console\Output\OutputInterface
-     */
-    private $output;
-
-    /**
-     * @var \Magento\UrlRewrite\Model\UrlPersistInterface
-     */
-    private $urlPersist;
-    /**
-     * @var \Symfony\Component\Console\Helper\ProgressBar
-     */
-    private $progressBar;
-    /**
-     * @var \Magento\Framework\ObjectManagerInterface
-     */
-    private $objectManager;
-    /**
-     * @var \Magento\Framework\App\State
-     */
-    private $state;
-
-    /**
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @param \Magento\Framework\App\State $state
-     */
-    public function __construct(
-        \Magento\Framework\ObjectManagerInterface $objectManager,
-        \Magento\Framework\App\State $state
-    )
-    {
-        $this->objectManager = $objectManager;
-        $this->state = $state;
-        parent::__construct();
-    }
 
     /**
      * {@inheritdoc}
      */
     protected function configure()
     {
-        $this->setName(self::NAME);
-        $this->setDescription(self::DESCRIPTION);
+        $this->setName('urlrewrite:rebuild:products');
+        $this->setDescription('Rebuild Product URL Rewrites');
         parent::configure();
     }
 
@@ -89,23 +45,19 @@ class Products extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        parent::execute($input,$output);
         try {
-            $this->state->setAreaCode('adminhtml');
-            $this->output = $output;
             $productCollection = $this->getProductCollection();
-            $this->setupProgress($productCollection->getSize());
-            $this->progressBar->start();
+            $this->progressBar->start($productCollection->getSize());
 
-
-            /** @var \Magento\Framework\Model\ResourceModel\Iterator $iterator */
-            $iterator = $this->objectManager->create('\Magento\Framework\Model\ResourceModel\Iterator');
-            $iterator->walk(
+            $this->getIterator()->walk(
                 $productCollection->getSelect(),
                 [[$this, 'callbackGenerateProductUrl']],
                 [
-                    'product' => $this->createProductFactory()
+                    'product' => $this->getProductFactory()
                 ]
             );
+
             $this->progressBar->finish();
         } catch (\Exception $e) {
             $this->output->writeln($e->getMessage());
@@ -142,55 +94,7 @@ class Products extends Command
         }
     }
 
-    /**
-     * Replace data with new product urls
-     *
-     * @param $urls
-     */
-    private function replaceUrls(array $urls)
-    {
-        if (empty($urls)) {
-            $this->output->writeln('Product without new urls');
-            return;
-        }
-        /** @var \Magento\UrlRewrite\Model\UrlPersistInterface $urlPersist */
-        $urlPersist = $this->objectManager->create('\Magento\UrlRewrite\Model\UrlPersistInterface');
-        $urlPersist->replace(
-            $urls
-        );
-    }
 
-    /**
-     * @return \Magento\Catalog\Model\ResourceModel\Product\Collection
-     */
-    private function getProductCollection()
-    {
-
-        /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $collection */
-        $collection = $this->objectManager->create('\Magento\Catalog\Model\ResourceModel\Product\CollectionFactory')->create();
-        return $collection->addAttributeToSelect('*');
-    }
-
-    /**
-     * Setup progress bar
-     */
-    private function setupProgress($operations)
-    {
-        $this->progressBar = new ProgressBar($this->output, $operations);
-        $this->progressBar->setFormat(
-            '<info>Product ID: %message%</info> %current%/%max% [%bar%] %percent:3s%% %elapsed% %estimated%        '
-        );
-    }
-
-    /**
-     * Create product factory
-     *
-     * @return \Magento\Catalog\Model\ProductFactory
-     */
-    private function createProductFactory()
-    {
-        return $this->objectManager->create('\Magento\Catalog\Model\ProductFactory')->create();
-    }
 
 
     /**
@@ -215,7 +119,7 @@ class Products extends Command
             $data[] = [UrlRewrite::STORE_ID => $storeId];
         }
         try {
-            $this->urlPersist->deleteByData($data);
+            $this->getUrlPersist()->deleteByData($data);
         } catch (\Exception $e) {
             $this->output->writeln($e->getMessage());
             return false;
@@ -231,8 +135,6 @@ class Products extends Command
      */
     private function prepareUrls($product)
     {
-        /** @var \Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator $productUrlRewriteGenerator */
-        $productUrlRewriteGenerator = $this->objectManager->create('\Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator');
-        return $productUrlRewriteGenerator->generate($product);
+        return $this->getProductUrlRewriteGenerator()->generate($product);
     }
 }
