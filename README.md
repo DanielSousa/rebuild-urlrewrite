@@ -7,14 +7,9 @@ Rebuild all product url rewrites.
 
 Build Status
 ------------
-
-+------------------------+-----------------------------------------------------------------------------------------------+
-| **Master Branch**      |                                                                                               |
-|                        | .. image:: https://scrutinizer-ci.com/g/DanielSousa/rebuild-urlrewrite/badges/quality-score.png?b=master |
-|                        |    :target: https://scrutinizer-ci.com/g/DanielSousa/rebuild-urlrewrite/code-structure/master |
-|                        | .. image:: https://scrutinizer-ci.com/g/DanielSousa/rebuild-urlrewrite/badges/build.png?b=master |
-|                        |    :target: https://scrutinizer-ci.com/g/DanielSousa/rebuild-urlrewrite/code-structure/master |
-+------------------------+-----------------------------------------------------------------------------------------------+
+**Master Branch**  
+[![alt text]( https://scrutinizer-ci.com/g/DanielSousa/rebuild-urlrewrite/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/DanielSousa/rebuild-urlrewrite/code-structure/master)
+[![alt text]( https://scrutinizer-ci.com/g/DanielSousa/rebuild-urlrewrite/badges/build.png?b=master)](https://scrutinizer-ci.com/g/DanielSousa/rebuild-urlrewrite/code-structure/master)
 
 
 Installation
