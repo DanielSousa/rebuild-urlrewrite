@@ -125,4 +125,13 @@ class AbstractUrlRewriteCommand extends Command
         }
         return $this->objectManager;
     }
+
+    /**
+     * @return \Magento\Framework\Model\ResourceModel\Iterator
+     */
+    public function getIterator()
+    {
+        return $this->objectManager->create('\Magento\Framework\Model\ResourceModel\Iterator');
+    }
+
 }
