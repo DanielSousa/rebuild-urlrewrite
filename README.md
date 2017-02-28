@@ -8,8 +8,8 @@ Rebuild all product url rewrites.
 Build Status
 ------------
 **Master Branch**  
-[![alt text]( https://scrutinizer-ci.com/g/DanielSousa/rebuild-urlrewrite/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/DanielSousa/rebuild-urlrewrite/code-structure/master)
-[![alt text]( https://scrutinizer-ci.com/g/DanielSousa/rebuild-urlrewrite/badges/build.png?b=master)](https://scrutinizer-ci.com/g/DanielSousa/rebuild-urlrewrite/code-structure/master)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/DanielSousa/rebuild-urlrewrite/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/DanielSousa/rebuild-urlrewrite/?branch=master)
+[![Build Status](https://scrutinizer-ci.com/g/DanielSousa/rebuild-urlrewrite/badges/build.png?b=master)](https://scrutinizer-ci.com/g/DanielSousa/rebuild-urlrewrite/build-status/master)
 
 
 Installation
