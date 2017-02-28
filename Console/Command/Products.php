@@ -73,7 +73,7 @@ class Products extends AbstractUrlRewriteCommand
                 $storeId = \Magento\Store\Model\Store::DEFAULT_STORE_ID;
             }
             $product->setStoreId($storeId);
-            $this->removeProductUrls($productId);
+            $this->removeProductUrls($productId, $storeId);
             $this->replaceUrls(
                 $this->prepareUrls($product)
             );
