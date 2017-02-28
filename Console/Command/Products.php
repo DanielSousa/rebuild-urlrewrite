@@ -40,6 +40,11 @@ class Products extends AbstractUrlRewriteCommand
     const INPUT_FORCE = 'force';
 
     /**
+     * Name of product input option
+     */
+    const INPUT_STORE = 'store';
+
+    /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
     protected $collection = null;
@@ -62,7 +67,12 @@ class Products extends AbstractUrlRewriteCommand
 
             $product = clone $args['product'];
             $product->load($productId);
-            $product->setStoreId(null);
+
+            $storeId = $args['storeId'];
+            if (is_null($storeId)) {
+                $storeId = \Magento\Store\Model\Store::DEFAULT_STORE_ID;
+            }
+            $product->setStoreId($storeId);
             $this->removeProductUrls($productId);
             $this->replaceUrls(
                 $this->prepareUrls($product)
@@ -135,6 +145,13 @@ class Products extends AbstractUrlRewriteCommand
                 'p',
                 InputOption::VALUE_OPTIONAL,
                 'Reindex a specific product'
+            ),
+            new InputOption(
+                self::INPUT_STORE,
+                's',
+                InputOption::VALUE_OPTIONAL,
+                'Reindex a specific store',
+                \Magento\Store\Model\Store::DEFAULT_STORE_ID
             )
         ];
         $this->setName('urlrewrite:rebuild:products');
@@ -153,9 +170,15 @@ class Products extends AbstractUrlRewriteCommand
         try {
 
             $productIds = $input->getOption(self::INPUT_PRODUCT);
-            $this->getProductCollection();
+            $storeId = $input->getOption(self::INPUT_STORE);
+            $this->getProductCollection()
+                ->addStoreFilter($storeId)
+                ->setStoreId($storeId);
+
             $this->addFilterProductIds($productIds);
-            $size = $this->collection->getSize();
+
+
+            $size = $this->getProductCollection()->getSize();
             if (!$size) {
                 $this->output->write('', true);
                 $this->output->write('Nothing to process', true);
@@ -168,7 +191,8 @@ class Products extends AbstractUrlRewriteCommand
                 $this->collection->getSelect(),
                 [[$this, 'callbackGenerateProductUrl']],
                 [
-                    'product' => $this->getProductFactory()
+                    'product' => $this->getProductFactory(),
+                    'storeId' => $storeId
                 ]
             );
             $this->progressBar->finish();
