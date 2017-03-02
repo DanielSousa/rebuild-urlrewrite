@@ -48,20 +48,6 @@ class AbstractUrlRewriteCommand extends Command
     private $objectManagerFactory;
 
     /**
-     * @param \Magento\Framework\App\ObjectManagerFactory $objectManagerFactory
-     * @internal param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @internal param \Magento\Framework\App\State $state
-     */
-    public function __construct(
-        \Magento\Framework\App\ObjectManagerFactory $objectManagerFactory
-    )
-    {
-        $this->objectManagerFactory = $objectManagerFactory;
-        parent::__construct();
-
-    }
-
-    /**
      * {@inheritdoc}
      */
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -116,7 +102,7 @@ class AbstractUrlRewriteCommand extends Command
     {
         if (null == $this->objectManager) {
             $area = FrontNameResolver::AREA_CODE;
-            $this->objectManager = $this->objectManagerFactory->create($_SERVER);
+            $this->objectManager = \Magento\Framework\App\ObjectManager::getInstance();
             /** @var \Magento\Framework\App\State $appState */
             $appState = $this->objectManager->get('Magento\Framework\App\State');
             $appState->setAreaCode($area);
@@ -131,7 +117,16 @@ class AbstractUrlRewriteCommand extends Command
      */
     public function getIterator()
     {
-        return $this->objectManager->create('\Magento\Framework\Model\ResourceModel\Iterator');
+        return $this->getObjectManager()->create('\Magento\Framework\Model\ResourceModel\Iterator');
+    }
+
+
+    /**
+     * @return  \Magento\Store\Model\StoreManagerInterface
+     */
+    public function getStoreManager()
+    {
+        return $this->getObjectManager()->get('\Magento\Store\Model\StoreManagerInterface');
     }
 
 }

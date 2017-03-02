@@ -28,21 +28,34 @@ Rebuild all products urls
  bin/magento urlrewrite:rebuild:products
 ```
 
-Rebuild one product 
+Rebuild all products urls from one store
+
+```bash
+ bin/magento urlrewrite:rebuild:products -s4
+```
+
+Rebuild one product url for one store
+
+```bash
+ bin/magento urlrewrite:rebuild:products -s1 -p 23
+```
+
+Rebuild one product url for all stores
 
 ```bash
  bin/magento urlrewrite:rebuild:products -p 23
 ```
 
-Rebuild two or more products 
+
+Rebuild two or more products urls by store
 
 ```bash
- bin/magento urlrewrite:rebuild:products -p 74,323,1234
+ bin/magento urlrewrite:rebuild:products -s5 -p 74,323,1234
 ```
 
 
 Prerequisites
 -------------
 
-- PHP >= 7.0.*
+- PHP >= 5.6.0
 - Magento >= 2.1.*
