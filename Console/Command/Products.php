@@ -54,7 +54,6 @@ class Products extends AbstractUrlRewriteCommand
      */
     protected $_collections = [];
 
-
     /**
      * {@inheritdoc}
      */
@@ -114,6 +113,7 @@ class Products extends AbstractUrlRewriteCommand
      */
     public function callbackGenerateProductUrl($args)
     {
+        $productId = null;
         try {
             if (!isset($args['row']['entity_id'])) {
                 $this->output->writeln('Id not found');
@@ -137,7 +137,10 @@ class Products extends AbstractUrlRewriteCommand
                 $this->prepareUrls($product)
             );
         } catch (\Exception $e) {
-            $this->output->writeln($e->getMessage() . '- Product ID -' . $productId);
+            if (!is_null($productId)) {
+                $this->output->writeln('ERROR ON PRODUCT ID -' . $productId);
+            }
+            $this->output->writeln($e->getMessage());
             return;
         }
     }
@@ -191,8 +194,6 @@ class Products extends AbstractUrlRewriteCommand
     {
         return $this->getObjectManager()->create('\Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator');
     }
-
-
 
     /**
      * Prepare Collections to process
