@@ -263,7 +263,7 @@ class Products extends AbstractUrlRewriteCommand
         }
         $this->_collection
             ->addStoreFilter($storeId)
-            ->setStoreId($storeId);;
+            ->setStoreId($storeId); ;
     }
 
     /**
