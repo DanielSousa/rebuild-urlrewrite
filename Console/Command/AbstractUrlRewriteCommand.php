@@ -42,10 +42,6 @@ class AbstractUrlRewriteCommand extends Command
      * @var \Symfony\Component\Console\Output\OutputInterface
      */
     protected $output;
-    /**
-     * @var \Magento\Framework\App\ObjectManagerFactory
-     */
-    private $objectManagerFactory;
 
     /**
      * {@inheritdoc}
