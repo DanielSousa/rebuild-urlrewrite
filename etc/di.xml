@@ -7,4 +7,11 @@
 			</argument>
 		</arguments>
 	</type>
+	<type name="Magento\Framework\Console\CommandList">
+		<arguments>
+			<argument name="commands" xsi:type="array">
+				<item name="urlrewriteRebuildCategories" xsi:type="object">DanielSousa\UrlRewrite\Console\Command\Categories</item>
+			</argument>
+		</arguments>
+	</type>
 </config>

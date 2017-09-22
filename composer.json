@@ -9,6 +9,7 @@
         }
     ],
     "minimum-stability": "dev",
+    "version": "0.1.0",
     "type": "magento2-module",
     "require": {
         "php": "~5.6.0|~7.0.0"
